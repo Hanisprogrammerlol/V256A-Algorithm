@@ -1,0 +1,4 @@
+﻿  V256A.cpp
+C:\Users\HP Laptop\Desktop\SomeProjects\V256A\V256A\core.cpp(53,44): warning C4554: '>>': check operator precedence for possible error; use parentheses to clarify precedence
+C:\Users\HP Laptop\Desktop\SomeProjects\V256A\V256A\core.cpp(54,89): warning C4554: '>>': check operator precedence for possible error; use parentheses to clarify precedence
+  V256A.vcxproj -> C:\Users\HP Laptop\Desktop\SomeProjects\V256A\Debug\V256A.exe
