@@ -30,4 +30,4 @@ int main()
 }
 ```
 
-Doesnt work for c only works for c++
+Doesnt work for c only work for c++
