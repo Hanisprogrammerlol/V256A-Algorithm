@@ -1,5 +1,5 @@
 /*
-* MIT License
+ MIT License
 
 Copyright (c) 2022 Hanisprogrammerlol
 
@@ -31,6 +31,7 @@ SOFTWARE.
 * 
 * known issues:
 * - (solved) horibble performance
+* - because this core used sprintf the variable sometimes will cause buffer overflow (i didnt use sprintf_s because of some issues)
 * 
 * fixed issues:
 * -performance is better
@@ -38,13 +39,22 @@ SOFTWARE.
 * -calcchunk performance is better
 * 
 * current version:
-* 1.2 Revision (last update maybe upcoming V256A+ or V256B?, lets find out)
+* 1.3 Revision
+* 
+* warning!
+* V256A only tested in msvc2019 compiler. when using gcc, clang or others is unstable or incompatible
 * 
 */
 
 #include <iostream>
 #include <cstdlib>
-#include "core.h"
+#include <cstring>
+#include "core.hpp"
+
+//disable C4996 error for msvc compilers
+#ifdef _MSVC_LANG
+#pragma warning(disable: 4996)
+#endif
 
 //V256A Struct Initialization
 V256A_Constructor V256A_Cons;
@@ -74,7 +84,7 @@ void V256A_CalcChunks(uint8_t asciicode) {
         0x2fe2133270548bf8, 0x47ad172ee39dc3aa
 
     };
-    V256A_Uint64_t* temp1 = (V256A_Uint64_t*)malloc(10 * sizeof(V256A_Uint64_t));
+    uint32_t *temp1 = (uint32_t*)malloc(10 * sizeof(uint32_t));
     for (uint32_t i = 0; i < 10; ++i) {
         temp1[i] += ch[i];
         temp1[i] += temp1[i] * 4;
@@ -146,7 +156,6 @@ void V256A_GenerateHash(const char *msg, uint16_t rotation, uint16_t xor_rotator
     }
     //overwrite data
     memcpy_s(tempmsg, sizeof(tempmsg), msg, sizeof(msg));
-    printf("V256A#ROT=%i#XOR=%i#OBS=%i#", rotation, xor_rotator, hash_obsfuscation);
     //because of some changes V256A will have 16 different hex for better performance
     for (uint32_t i = 0; i < 16; i++) {
         datstrhash = tempmsg[i] >> i + rotation;
@@ -165,23 +174,31 @@ void V256A_GenerateHash(const char *msg, uint16_t rotation, uint16_t xor_rotator
         datstrhash = datstrhash * strlen(msg);
         V256A_Cons.curr_hash[i] += datstrhash / 6;
     }
-    for (uint16_t i = 0; i < 16; i++) {
-        std::cout << std::hex << V256A_Cons.curr_hash[i];
-    }
     free(tempmsg);
     return;
 };
 
+//last process to call before V256A_Sweep() and after V256A_GenerateHash()
+void V256A_ProcessHash(char *output) {
+    char *temp = (char*)malloc(16 * sizeof(char));
+    for (uint16_t i = 0; i < 16; ++i) {
+        sprintf(temp, "%llx", V256A_Cons.curr_hash[i]);
+        std::cout << temp;
+    }
+    output = temp;
+    free(temp);
+}
+
 //reset chunks, rfactor, curr_hash, digest_size
 void V256A_Sweep(void) {
-    for (uint16_t i = 0; i < 10; i++) {
+    for (uint16_t i = 0; i < 10; ++i) {
         V256A_Cons.rfactor[i] = 0x0;
         V256A_Cons.chunks[i] = 0x0;
     }
-    for (uint16_t i = 0; i < 16; i++) {
+    for (uint16_t i = 0; i < 16; ++i) {
         V256A_Cons.curr_hash[i] = 0x0;
     }
-    for (uint16_t i = 0; i < 64; i++) {
+    for (uint16_t i = 0; i < 64; ++i) {
         V256A_Cons.digest_size[i] = 0x0;
     }
 };

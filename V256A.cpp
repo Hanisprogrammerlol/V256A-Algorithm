@@ -1,5 +1,5 @@
 /*
-* MIT License
+ MIT License
 
 Copyright (c) 2022 Hanisprogrammerlol
 
@@ -24,26 +24,24 @@ SOFTWARE.
 this is an example of V256A the main program of V256A is core.cpp and core.h
 */
 
-#include "core.h"
+#include "core.hpp"
 
 int main()
 {
     //this is basic of V256A
     //text variable must be pointer if its not pointers V256A_GenerateHash will not work
     const char* text = "test123";
+    //output variables must use (char*)"" for initialization
+    char* out = (char*)"";
     V256A_Init();
     V256A_Digest();
+    //V256A_CalcChunks() will calculate chunks based on given ascii codes you can modify it
+    //into text[0] even text[4] but i recommend use it between text[0] and text[1]
     V256A_CalcChunks(text[0]);
     V256A_GenerateHash(text, 32, 32, 512);
+    //process hash must be before V256A_Sweep() and after V256A_GenerateHash() function
+    V256A_ProcessHash(out);
     //V256A Sweep will sweep all data from core.h struct
     V256A_Sweep();
-
-    //or you can do this
-    const char* text = "test123";
-    V256A_Digest();
-    V256A_CalcChunks(text[0]);
-    V256A_Init();
-    //generate hash must be last
-    V256A_GenerateHash(text, 32, 32, 512);
-    V256A_Sweep();
+    std::cout << out;
 }
