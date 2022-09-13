@@ -1,26 +1,26 @@
 /*
- MIT License
-
-Copyright (c) 2022 Hanisprogrammerlol
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-* 
+* MIT License
+*
+* Copyright (c) 2022 Hanisprogrammerlol
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*
 * this is the core of V256A
 * V256A was designed for signature of VChain
 * made by void
@@ -37,9 +37,10 @@ SOFTWARE.
 * -performance is better
 * -memory leak issue is solved
 * -calcchunk performance is better
+* -fixed output will return blank string
 * 
 * current version:
-* 1.3 Revision
+* 1.4 Revision
 * 
 * warning!
 * V256A only tested in msvc2019 compiler. when using gcc, clang or others is unstable or incompatible
@@ -179,14 +180,15 @@ void V256A_GenerateHash(const char *msg, uint16_t rotation, uint16_t xor_rotator
 };
 
 //last process to call before V256A_Sweep() and after V256A_GenerateHash()
-void V256A_ProcessHash(char *output) {
+void V256A_ProcessHash(char* output) {
     char *temp = (char*)malloc(16 * sizeof(char));
+    char temp2[170] = "";
     for (uint16_t i = 0; i < 16; ++i) {
         sprintf(temp, "%llx", V256A_Cons.curr_hash[i]);
-        std::cout << temp;
+        strcat(temp2, temp);
     }
-    output = temp;
     free(temp);
+    memcpy(output, temp2, strlen(temp2) + 1);
 }
 
 //reset chunks, rfactor, curr_hash, digest_size
