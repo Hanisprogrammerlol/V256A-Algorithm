@@ -40,10 +40,10 @@
 * -fixed output will return blank string
 * 
 * current version:
-* 1.4 Revision
+* 1.4.1 Revision
 * 
 * warning!
-* V256A only tested in msvc2019 compiler. when using gcc, clang or others is unstable or incompatible
+* V256A has been tested on msvc2019 and g++, but not tested on clang and other compiler
 * 
 */
 
@@ -156,7 +156,7 @@ void V256A_GenerateHash(const char *msg, uint16_t rotation, uint16_t xor_rotator
         return throw "digest_size is not digested: digest_size returned 0x0"; // digest_size is not digested
     }
     //overwrite data
-    memcpy_s(tempmsg, sizeof(tempmsg), msg, sizeof(msg));
+    memcpy(tempmsg, msg, sizeof(tempmsg));
     //because of some changes V256A will have 16 different hex for better performance
     for (uint32_t i = 0; i < 16; i++) {
         datstrhash = tempmsg[i] >> i + rotation;
