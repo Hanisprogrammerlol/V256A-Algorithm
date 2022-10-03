@@ -30,17 +30,18 @@
 * thank you for sha256 and argon2 creator
 * 
 * known issues:
-* - (solved) horibble performance
-* - because this core used sprintf the variable sometimes will cause buffer overflow (i didnt use sprintf_s because of some issues)
+* -
 * 
 * fixed issues:
 * -performance is better
 * -memory leak issue is solved
 * -calcchunk performance is better
 * -fixed output will return blank string
+* -(solved) because this core used sprintf the variable sometimes will cause buffer overflow (i didnt use sprintf_s because of some issues)
+* -
 * 
 * current version:
-* 1.4.1 Revision
+* 1.4.2 Revision
 * 
 * warning!
 * V256A has been tested on msvc2019 and g++, but not tested on clang and other compiler
@@ -99,7 +100,7 @@ void V256A_CalcChunks(uint8_t asciicode) {
 };
 
 void V256A_Digest(void) {
-    V256A_Uint16_t v[64]{
+    const static V256A_Uint16_t v[64]{
         0xc593, 0x29ae, 0x19fc, 0x70b0, 0x2dba,
         0x9a32, 0x290d, 0x8ec7, 0xa9f8, 0xb021,
         0x359a, 0xa00e, 0x7825, 0xcdb3, 0x52c4,

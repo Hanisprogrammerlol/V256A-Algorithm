@@ -21,7 +21,9 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-#pragma once
+
+#ifndef CORE_HPP
+#define CORE_HPP
 #include <iostream>
 
 //V256A Custom Type
@@ -72,3 +74,5 @@ void V256A_Digest(void);
 void V256A_GenerateHash(const char* msg, uint16_t rotation, uint16_t xor_rotator, uint16_t hash_obsfuscation);
 void V256A_ProcessHash(char* output);
 void V256A_Sweep(void);
+
+#endif
