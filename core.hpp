@@ -75,4 +75,16 @@ void V256A_GenerateHash(const char* msg, uint16_t rotation, uint16_t xor_rotator
 void V256A_ProcessHash(char* output);
 void V256A_Sweep(void);
 
+class V256A {
+	public:
+		static void CreateHash(const char* text, char* output, uint16_t rotation, uint16_t xor_rotator, uint16_t hash_obsfuscation) {
+			V256A_Init();
+			V256A_CalcChunks(text[0]);
+			V256A_Digest();
+			V256A_GenerateHash(text, rotation, xor_rotator, hash_obsfuscation);
+			V256A_ProcessHash(output);
+			V256A_Sweep();
+		}
+};
+
 #endif

@@ -43,6 +43,12 @@ int main()
     V256A_ProcessHash(out);
     //V256A Sweep will sweep all data from core.h struct
     V256A_Sweep();
-    std::cout << out;
+    std::cout << out << "\n\n";
+    //the memcpy will reset value inside variable out into blank string
+    //if you dont reset the value inside out it will print out the same output even if you generate hash 10 times
+    memcpy(out, "", sizeof(""));
+    //or you can use this method to generate new hash
+    V256A::CreateHash(text, out, 32, 32, 512);
+    std::cout << out; 
     free(out);
 }

@@ -30,7 +30,6 @@
 * thank you for sha256 and argon2 creator
 * 
 * known issues:
-* -
 * 
 * fixed issues:
 * -performance is better
@@ -38,10 +37,10 @@
 * -calcchunk performance is better
 * -fixed output will return blank string
 * -(solved) because this core used sprintf the variable sometimes will cause buffer overflow (i didnt use sprintf_s because of some issues)
-* -
+* -changed malloc into calloc because of undefined behaviour of hashing
 * 
 * current version:
-* 1.4.2 Revision
+* 1.4.3 Revision
 * 
 * warning!
 * V256A has been tested on msvc2019 and g++, but not tested on clang and other compiler
@@ -86,7 +85,7 @@ void V256A_CalcChunks(uint8_t asciicode) {
         0x2fe2133270548bf8, 0x47ad172ee39dc3aa
 
     };
-    uint32_t *temp1 = (uint32_t*)malloc(10 * sizeof(uint32_t));
+    uint32_t *temp1 = (uint32_t*)calloc(10, sizeof(uint32_t));
     for (uint32_t i = 0; i < 10; ++i) {
         temp1[i] += ch[i];
         temp1[i] += temp1[i] * 4;
@@ -122,7 +121,7 @@ void V256A_Digest(void) {
 
 //Generate V256A Hash But Call V256A_Init() and V256A_CalcChunks() first
 void V256A_GenerateHash(const char *msg, uint16_t rotation, uint16_t xor_rotator, uint16_t hash_obsfuscation) {
-    V256A_Text *tempmsg = (V256A_Text*)malloc(16 * sizeof(V256A_Text));
+    V256A_Text *tempmsg = (V256A_Text*)calloc(16, sizeof(V256A_Text));
     V256A_Uint64_t datstrhash = 0;
     V256A_Uint64_t mlen = 0;
     //checking for parameters
@@ -160,7 +159,7 @@ void V256A_GenerateHash(const char *msg, uint16_t rotation, uint16_t xor_rotator
     memcpy(tempmsg, msg, sizeof(tempmsg));
     //because of some changes V256A will have 16 different hex for better performance
     for (uint32_t i = 0; i < 16; i++) {
-        datstrhash = tempmsg[i] >> i + rotation;
+        datstrhash = tempmsg[i] >> i * rotation;
         datstrhash = datstrhash << 2 >> 4 << 1 >> rotation + hash_obsfuscation;
         datstrhash = datstrhash ^ xor_rotator + 1;
         datstrhash = datstrhash >> mlen << 4 >> 2 ^ xor_rotator;
@@ -182,7 +181,7 @@ void V256A_GenerateHash(const char *msg, uint16_t rotation, uint16_t xor_rotator
 
 //last process to call before V256A_Sweep() and after V256A_GenerateHash()
 void V256A_ProcessHash(char* output) {
-    char *temp = (char*)malloc(16 * sizeof(char));
+    char *temp = (char*)calloc(16, sizeof(char));
     char temp2[170] = "";
     for (uint16_t i = 0; i < 16; ++i) {
         sprintf(temp, "%llx", V256A_Cons.curr_hash[i]);
