@@ -24,6 +24,14 @@
 
 #ifndef CORE_HPP
 #define CORE_HPP
+//V256A_OUTPUTSIZE_S is used on common V256A hashing (hashing with 0-8192 char text length with allocated 256 byte of memory)
+#define V256A_OUTPUTSIZE_S 256
+//V256A_OUTPUTSIZE_B is used on complex V256A hashing (hashing with 8192-16384 char text length with allocated 512 byte of memory)
+#define V256A_OUTPUTSIZE_B 512
+//V256A_OUTPUTSIZE_H is used on very complex V256A hashing (hashing with 16384-(probably around 40k) char text length with allocated 1024 byte of memory)
+#define V256A_OUTPUTSIZE_H  1024
+//V256A_OUTPUTSIZE_HH is used on very very complex V256A hashing with allocated 2048 byte of memory
+#define V256A_OUTPUTSIZE_HH  2048
 #include <iostream>
 
 //V256A Custom Type

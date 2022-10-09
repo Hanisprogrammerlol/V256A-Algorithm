@@ -40,10 +40,11 @@
 * -changed malloc into calloc because of undefined behaviour of hashing
 * 
 * current version:
-* 1.4.3 Revision
+* 1.4.4 Revision
 * 
 * warning!
 * V256A has been tested on msvc2019 and g++, but not tested on clang and other compiler
+* minimum ram size is 4kb
 * 
 */
 
@@ -79,7 +80,7 @@ void V256A_Init(void) {
 //Chunk Calculator for V256A must call V256A_Init first before calling function
 void V256A_CalcChunks(uint8_t asciicode) {
     //before calcchunks, call V256A_Init(); first to initialize default data
-    const static uint64_t ch[10]{
+    const uint64_t ch[10]{
         0xfd2c64f92d42cfab, 0x25581188432fcc78, 0xf0a78705d3d0dcb1, 0xbe2339b2d97f789f,
         0xe65043773f9c3a9e, 0x4ec4de1fee1403f8, 0xc428ee3cbc51eba8, 0xfddaa39125bff3eb,
         0x2fe2133270548bf8, 0x47ad172ee39dc3aa
@@ -99,7 +100,7 @@ void V256A_CalcChunks(uint8_t asciicode) {
 };
 
 void V256A_Digest(void) {
-    const static V256A_Uint16_t v[64]{
+    const V256A_Uint16_t v[64]{
         0xc593, 0x29ae, 0x19fc, 0x70b0, 0x2dba,
         0x9a32, 0x290d, 0x8ec7, 0xa9f8, 0xb021,
         0x359a, 0xa00e, 0x7825, 0xcdb3, 0x52c4,
@@ -182,7 +183,7 @@ void V256A_GenerateHash(const char *msg, uint16_t rotation, uint16_t xor_rotator
 //last process to call before V256A_Sweep() and after V256A_GenerateHash()
 void V256A_ProcessHash(char* output) {
     char *temp = (char*)calloc(16, sizeof(char));
-    char temp2[170] = "";
+    char temp2[512] = "";
     for (uint16_t i = 0; i < 16; ++i) {
         sprintf(temp, "%llx", V256A_Cons.curr_hash[i]);
         strcat(temp2, temp);

@@ -31,8 +31,7 @@ int main()
     //this is basic of V256A
     //text variable must be pointer if its not pointers V256A_GenerateHash will not work
     const char* text = "test";
-    //output variables must use malloc(170) for initialization (because V256A outputs char with 170 bytes, malloc must use 170 bytes)
-    char* out = (char*)malloc(170);
+    char* out = (char*)malloc(V256A_OUTPUTSIZE_S);
     V256A_Init();
     V256A_Digest();
     //V256A_CalcChunks() will calculate chunks based on given ascii codes you can modify it
@@ -44,11 +43,8 @@ int main()
     //V256A Sweep will sweep all data from core.h struct
     V256A_Sweep();
     std::cout << out << "\n\n";
-    //the memcpy will reset value inside variable out into blank string
-    //if you dont reset the value inside out it will print out the same output even if you generate hash 10 times
-    memcpy(out, "", sizeof(""));
     //or you can use this method to generate new hash
     V256A::CreateHash(text, out, 32, 32, 512);
-    std::cout << out; 
+    std::cout << out;
     free(out);
 }
