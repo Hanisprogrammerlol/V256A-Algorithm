@@ -15,8 +15,8 @@ int main()
     //this is basic of V256A
     //text variable must be pointer if its not pointers V256A_GenerateHash will not work
     const char* text = "test";
-    //output variables must use malloc(170) for initialization (because V256A outputs char with 170 bytes, malloc must use 170 bytes)
-    char* out = (char*)malloc(170);
+    //output variables must use V256A_OUTPUTSIZE_S for simple hashing
+    char* out = (char*)malloc(V256A_OUTPUTSIZE_S);
     V256A_Init();
     V256A_Digest();
     //V256A_CalcChunks() will calculate chunks based on given ascii codes you can modify it
@@ -39,8 +39,8 @@ int main()
 {
     //more simplified version to create V256A hash
     const char* text = "test";
-    //output variables must use malloc(170) for initialization (because V256A outputs char with 170 bytes, malloc must use 170 bytes)
-    char* out = (char*)malloc(170);
+    //output variables must use V256A_OUTPUTSIZE_S for simple hashing
+    char* out = (char*)malloc(V256A_OUTPUTSIZE_S);
     V256A::CreateHash(text, out, 32, 32, 512);
     std::cout << out; 
     free(out);
@@ -55,16 +55,16 @@ int main()
 {
     //generate 2 hash at a same time example
     const char* text = "test";
-    //output variables must use malloc(170) for initialization (because V256A outputs char with 170 bytes, malloc must use 170 bytes)
-    char* out = (char*)malloc(170);
+    //output variables must use V256A_OUTPUTSIZE_S for simple hashing
+    char* out = (char*)malloc(V256A_OUTPUTSIZE_S);
     V256A::CreateHash(text, out, 32, 32, 512);
     std::cout << out << "\n\n";
-    //the memcpy will reset value inside variable out into blank string
-    memcpy(out, "", sizeof(""));
     V256A::CreateHash(text, out, 16, 16, 256);
     std::cout << out;
     free(out);
 }
 ```
 
-Doesnt work for c only work for c++
+# Warning!
+- on visual studio you can compile it into debug and release mode and it will generate different hash depending on its mode!
+- Compatible for c++ only!
