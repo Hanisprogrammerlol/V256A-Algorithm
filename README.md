@@ -67,4 +67,5 @@ int main()
 
 # Warning!
 - on visual studio you can compile it into debug and release mode and it will generate different hash depending on its mode!
-- Compatible for c++ only!
+- Compatible for 64bit platforms and c++ only!
+- This version is only for testing. not for password hashing or else cause this version has inconsistent hashing bug
